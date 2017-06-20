@@ -127,10 +127,18 @@ public class MainAct extends AppCompatActivity implements AdapterView.OnItemClic
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
 
+        /*
         Cliente cliente = adpClientes.getItem(i);
         Intent it = new Intent(this, ActAddCliente.class);
         it.putExtra("CLIENTES", cliente);
         startActivityForResult(it, 0);
+        */
+
+
+        Cliente cliente = adpClientes.getItem(i);
+        Intent it = new Intent(this, ActResultados.class);
+        it.putExtra("CLIENTES", cliente);
+        startActivity(it);
 
     }
 

@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
         <activity android:name="com.example.vinicius.prefapp.ActAddCliente" />
+        <activity android:name="com.example.vinicius.prefapp.ActResultados" />
     </application>
 
 </manifest>
