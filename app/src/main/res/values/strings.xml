@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">ProtocoloApp</string>
+    <string name="action_settings">Settings</string>
+    <string name="lbl_update">Ultimos</string>
+    <string name="lbl_salvar">Salvar</string>
+    <string name="lbl_alterar">Alterar</string>
+    <string name="lbl_excluir">Excluir</string>
+    <string name="lbl_fechar">Fechar</string>
+</resources>

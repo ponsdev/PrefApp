@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.example.vinic.protocoloapp.MainAct">
+    <item
+        android:id="@+id/mni_acao1"
+        android:orderInCategory="100"
+        android:title="@string/lbl_salvar"
+        app:showAsAction="never"
+        android:visible="true"/>
+    <item
+        android:id="@+id/mni_acao2"
+        android:orderInCategory="100"
+        android:title="@string/lbl_excluir"
+        app:showAsAction="never"
+        android:visible="true"/>
+    <item
+        android:id="@+id/mni_acao3"
+        android:orderInCategory="100"
+        android:title="@string/lbl_fechar"
+        app:showAsAction="never"
+        android:visible="true"/>
+</menu>
