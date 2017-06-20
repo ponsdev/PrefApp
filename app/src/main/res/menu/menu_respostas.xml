@@ -1,18 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="com.example.vinicius.prefapp.MainAct">
+    tools:context="com.example.vinic.protocoloapp.MainAct">
     <item
-        android:id="@+id/mni_ultimos"
+        android:id="@+id/mni_alterar"
         android:orderInCategory="100"
-        android:title="@string/lbl_update"
+        android:title="@string/lbl_alterar"
         app:showAsAction="never"
         android:visible="true"/>
     <item
-        android:id="@+id/mni_criar"
+        android:id="@+id/mni_fechar"
         android:orderInCategory="100"
-        android:title="Criar"
+        android:title="@string/lbl_fechar"
         app:showAsAction="never"
-        android:visible="true" />
+        android:visible="true"/>
 
 </menu>
