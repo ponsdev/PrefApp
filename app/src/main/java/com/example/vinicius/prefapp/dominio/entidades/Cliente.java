@@ -1,10 +1,21 @@
 package com.example.vinicius.prefapp.dominio.entidades;
 
+import java.io.Serializable;
+
+
 /**
  * Created by vinicius on 19/06/17.
  */
 
-public class Cliente {
+public class Cliente implements Serializable{
+
+    public static String ID = "_id";
+    public static String NOME = "NOME";
+    public static String COD = "CODIGO";
+    public static String NUM = "NUMERO";
+    public static String ANO = "ANO";
+    public static String SETOR = "SETOR";
+
 
     private long id;
     private String nome;
@@ -14,6 +25,8 @@ public class Cliente {
     private String setor;
 
     public void Cliente() {
+
+        id = 0;
 
     }
 

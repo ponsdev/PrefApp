@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,11 +16,12 @@ import android.widget.ListView;
 import android.database.sqlite.*;
 import android.database.*;
 
+import com.example.vinicius.prefapp.app.MsgBox;
 import com.example.vinicius.prefapp.database.Database;
 import com.example.vinicius.prefapp.dominio.RepositorioClientes;
 import com.example.vinicius.prefapp.dominio.entidades.Cliente;
 
-public class MainAct extends AppCompatActivity {
+public class MainAct extends AppCompatActivity implements AdapterView.OnItemClickListener{
 
     private ListView lstLista;
     private EditText edtBusca;
@@ -48,6 +50,7 @@ public class MainAct extends AppCompatActivity {
 
         edtBusca = (EditText) findViewById(R.id.edtBusca);
         lstLista = (ListView) findViewById(R.id.lstLista);
+        lstLista.setOnItemClickListener(this);
 
 
         try {
@@ -65,10 +68,7 @@ public class MainAct extends AppCompatActivity {
             dlg.show();*/
 
         } catch (SQLException ex) {
-            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-            dlg.setMessage("Erro ao criar o banco de dados: " + ex.getMessage());
-            dlg.setNeutralButton("OK", null);
-            dlg.show();
+            MsgBox.show(this, "Erro", "Erro ao criar o banco de dados: " + ex.getMessage());
         }
 
 
@@ -110,6 +110,19 @@ public class MainAct extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+        adpClientes = repositorioClientes.buscaClientes(this);
+        lstLista.setAdapter(adpClientes);
+
         super.onActivityResult(requestCode, resultCode, data);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int i, long l) {
+
+        Cliente cliente = adpClientes.getItem(i);
+        Intent it = new Intent(this, ActAddCliente.class);
+        it.putExtra("CLIENTES", cliente);
+        startActivityForResult(it, 0);
+
     }
 }

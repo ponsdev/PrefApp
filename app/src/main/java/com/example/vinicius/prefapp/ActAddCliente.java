@@ -12,7 +12,9 @@ import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
+import com.example.vinicius.prefapp.app.MsgBox;
 import com.example.vinicius.prefapp.database.Database;
 import com.example.vinicius.prefapp.dominio.RepositorioClientes;
 import com.example.vinicius.prefapp.dominio.entidades.Cliente;
@@ -72,21 +74,22 @@ public class ActAddCliente extends AppCompatActivity {
         adpSetor.add("CMU");
         adpSetor.add("UNIFICAÇÃO");
 
+
+        Bundle bundle = getIntent().getExtras();
+        if ((bundle != null) && (bundle.containsKey("CLIENTES"))){
+            cliente = (Cliente) bundle.getSerializable("CLIENTES");
+            preencheDados();
+        }
+        else { cliente = new Cliente(); }
+
+
         try {
             dataBase = new Database(this);
             conn = dataBase.getWritableDatabase();
             repositorioClientes = new RepositorioClientes(conn);
 
-            /*AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-            dlg.setMessage("Conexão criada com sucesso");
-            dlg.setNeutralButton("OK", null);
-            dlg.show();*/
-
         } catch (SQLException ex) {
-            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-            dlg.setMessage("Erro ao criar o banco de dados: " + ex.getMessage());
-            dlg.setNeutralButton("OK", null);
-            dlg.show();
+            MsgBox.show(this, "Erro!!!", "Erro ao criar o banco de dados: " + ex.getMessage());
         }
 
 
@@ -101,13 +104,12 @@ public class ActAddCliente extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case (R.id.mni_salvar):
-                if (cliente == null){
-                    inserir();
-                }
+                salvar();
                 finish();
                 break;
             case (R.id.mni_excluir):
-
+                excluir();
+                finish();
                 break;
             case (R.id.mni_fechar):
                 finish();
@@ -116,22 +118,44 @@ public class ActAddCliente extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void inserir() {
+    private void preencheDados() {
+        edtNome.setText(cliente.getNome());
+        spnCodigo.setSelection(adpCodigo.getPosition(cliente.getCodigo()));
+        edtNumero.setText(cliente.getNumero());
+        spnAno.setSelection(adpAno.getPosition(cliente.getAno()));
+        spnSetor.setSelection(adpSetor.getPosition(cliente.getSetor()));
+        Toast.makeText(this, String.valueOf(cliente.getId()), Toast.LENGTH_LONG).show();
+    }
+
+    private void salvar() {
         try {
-            cliente = new Cliente();
+            //cliente = new Cliente();
             cliente.setNome(edtNome.getText().toString());
             cliente.setCodigo(spnCodigo.getSelectedItem().toString());
             cliente.setNumero(edtNumero.getText().toString());
             cliente.setAno(spnAno.getSelectedItem().toString());
             cliente.setSetor(spnSetor.getSelectedItem().toString());
 
-            repositorioClientes.inserir(cliente);
+            if (cliente.getId() == 0) {
+                repositorioClientes.inserir(cliente);
+                Toast.makeText(this, "Cadastro realizado", Toast.LENGTH_LONG).show();
+            } else {
+                repositorioClientes.alterar(cliente);
+                Toast.makeText(this, "Cadastro alterado", Toast.LENGTH_LONG).show();
+            }
+
         } catch (Exception ex) {
-            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-            dlg.setMessage("Erro ao inserir os dados: " + ex.getMessage());
-            dlg.setNeutralButton("OK", null);
-            dlg.show();
+            MsgBox.show(this, "OPS....", "Erro ao inserir os dados: " + ex.getMessage());
         }
 
+    }
+
+    private void excluir() {
+        try {
+            repositorioClientes.excluir( cliente.getId() );
+
+        } catch (Exception ex) {
+            MsgBox.show(this, "Erro", "Erro ao excluir os dados: " + ex.getMessage());
+        }
     }
 }

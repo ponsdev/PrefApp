@@ -34,16 +34,25 @@ public class RepositorioClientes {
         conn.insertOrThrow("CLIENTES", null, values);
 
     }
-/*
-    public void testeInserirContatos() {
-        for (int i=0; i<10; i++){
-            ContentValues values = new ContentValues();
-            values.put("NOME", "VINICIUS");
-            conn.insertOrThrow("CLIENTES", null, values);
-        }
+
+    public void alterar(Cliente cliente){
+
+        ContentValues values = new ContentValues();
+        values.put("NOME", cliente.getNome());
+        values.put("CODIGO", cliente.getCodigo());
+        values.put("NUMERO", cliente.getNumero());
+        values.put("ANO", cliente.getAno());
+        values.put("SETOR", cliente.getSetor());
+
+
+        conn.update("CLIENTES", values, " _id = ? ", new String[]{ String.valueOf(cliente.getId()) });
 
     }
-*/
+
+    public void excluir(long id) {
+        conn.delete("CLIENTES", " _id = ? ", new String[]{ String.valueOf( id ) });
+    }
+
     public ArrayAdapter<Cliente> buscaClientes(Context context) {
 
         ArrayAdapter<Cliente> adpClientes = new ArrayAdapter<Cliente>(context,
@@ -54,6 +63,7 @@ public class RepositorioClientes {
             cursor.moveToFirst();
             do {
                 Cliente cliente = new Cliente();
+                cliente.setId(cursor.getLong(0));
                 cliente.setNome(cursor.getString(1));
                 cliente.setCodigo(cursor.getString(2));
                 cliente.setNumero(cursor.getString(3));

@@ -9,6 +9,15 @@
     tools:showIn="@layout/act_main"
     android:orientation="vertical">
 
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:text="BUSCAS CADASTRADAS"
+        android:textSize="20dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="5dp" />
+
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
