@@ -3,15 +3,22 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.vinicius.prefapp.MainAct">
     <item
-        android:id="@+id/mni_acao1"
+        android:id="@+id/mni_ultimos"
         android:orderInCategory="100"
         android:title="@string/lbl_update"
         app:showAsAction="never"
         android:visible="true"/>
     <item
-        android:id="@+id/mni_acao2"
+        android:id="@+id/mni_criar"
+        android:orderInCategory="100"
+        android:title="Criar"
+        app:showAsAction="never"
+        android:visible="true" />
+    <item
+        android:id="@+id/mni_alterar"
         android:orderInCategory="100"
         android:title="@string/lbl_alterar"
         app:showAsAction="never"
         android:visible="true" />
+
 </menu>

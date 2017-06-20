@@ -2,13 +2,20 @@ package com.example.vinicius.prefapp;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+
+import com.example.vinicius.prefapp.database.Database;
+import com.example.vinicius.prefapp.dominio.RepositorioClientes;
+import com.example.vinicius.prefapp.dominio.entidades.Cliente;
 
 /**
  * Created by vinic on 19/06/2017.
@@ -25,6 +32,11 @@ public class ActAddCliente extends AppCompatActivity {
     private ArrayAdapter<String> adpCodigo;
     private ArrayAdapter<String> adpAno;
     private ArrayAdapter<String> adpSetor;
+
+    private Database dataBase;
+    private SQLiteDatabase conn;
+    private RepositorioClientes repositorioClientes;
+    private Cliente cliente;
 
 
     @Override
@@ -60,6 +72,23 @@ public class ActAddCliente extends AppCompatActivity {
         adpSetor.add("CMU");
         adpSetor.add("UNIFICAÇÃO");
 
+        try {
+            dataBase = new Database(this);
+            conn = dataBase.getWritableDatabase();
+            repositorioClientes = new RepositorioClientes(conn);
+
+            /*AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+            dlg.setMessage("Conexão criada com sucesso");
+            dlg.setNeutralButton("OK", null);
+            dlg.show();*/
+
+        } catch (SQLException ex) {
+            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+            dlg.setMessage("Erro ao criar o banco de dados: " + ex.getMessage());
+            dlg.setNeutralButton("OK", null);
+            dlg.show();
+        }
+
 
     }
 
@@ -71,16 +100,38 @@ public class ActAddCliente extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case (R.id.mni_acao1):
+            case (R.id.mni_salvar):
+                if (cliente == null){
+                    inserir();
+                }
+                finish();
+                break;
+            case (R.id.mni_excluir):
 
                 break;
-            case (R.id.mni_acao2):
-
-                break;
-            case (R.id.mni_acao3):
+            case (R.id.mni_fechar):
                 finish();
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    private void inserir() {
+        try {
+            cliente = new Cliente();
+            cliente.setNome(edtNome.getText().toString());
+            cliente.setCodigo(spnCodigo.getSelectedItem().toString());
+            cliente.setNumero(edtNumero.getText().toString());
+            cliente.setAno(spnAno.getSelectedItem().toString());
+            cliente.setSetor(spnSetor.getSelectedItem().toString());
+
+            repositorioClientes.inserir(cliente);
+        } catch (Exception ex) {
+            AlertDialog.Builder dlg = new AlertDialog.Builder(this);
+            dlg.setMessage("Erro ao inserir os dados: " + ex.getMessage());
+            dlg.setNeutralButton("OK", null);
+            dlg.show();
+        }
+
     }
 }
