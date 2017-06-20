@@ -96,6 +96,15 @@ public class ActAddCliente extends AppCompatActivity {
     }
 
     @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (conn != null){
+            conn.close();
+        }
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_cadastro, menu);
         return super.onCreateOptionsMenu(menu);

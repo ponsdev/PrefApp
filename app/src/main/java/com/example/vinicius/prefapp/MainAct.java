@@ -2,15 +2,15 @@ package com.example.vinicius.prefapp;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.database.sqlite.*;
@@ -59,13 +59,10 @@ public class MainAct extends AppCompatActivity implements AdapterView.OnItemClic
 
             repositorioClientes = new RepositorioClientes(conn);
             adpClientes = repositorioClientes.buscaClientes(this);
-            // repositorioClientes.testeInserirContatos();
             lstLista.setAdapter(adpClientes);
 
-            /*AlertDialog.Builder dlg = new AlertDialog.Builder(this);
-            dlg.setMessage("Conexão criada com sucesso");
-            dlg.setNeutralButton("OK", null);
-            dlg.show();*/
+            FiltraDados filtraDados = new FiltraDados(adpClientes);
+            edtBusca.addTextChangedListener(filtraDados);
 
         } catch (SQLException ex) {
             MsgBox.show(this, "Erro", "Erro ao criar o banco de dados: " + ex.getMessage());
@@ -73,6 +70,15 @@ public class MainAct extends AppCompatActivity implements AdapterView.OnItemClic
 
 
 
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        if (conn != null){
+            conn.close();
+        }
     }
 
     @Override
@@ -112,6 +118,8 @@ public class MainAct extends AppCompatActivity implements AdapterView.OnItemClic
 
         adpClientes = repositorioClientes.buscaClientes(this);
         lstLista.setAdapter(adpClientes);
+        FiltraDados filtraDados = new FiltraDados(adpClientes);
+        edtBusca.addTextChangedListener(filtraDados);
 
         super.onActivityResult(requestCode, resultCode, data);
     }
@@ -124,5 +132,25 @@ public class MainAct extends AppCompatActivity implements AdapterView.OnItemClic
         it.putExtra("CLIENTES", cliente);
         startActivityForResult(it, 0);
 
+    }
+
+    private class FiltraDados implements TextWatcher {
+
+        ArrayAdapter<Cliente> arrayAdapter;
+
+        private FiltraDados(ArrayAdapter<Cliente> arrayAdapter) {
+            this.arrayAdapter = arrayAdapter;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+        @Override
+        public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            arrayAdapter .getFilter().filter(charSequence);
+        }
+
+        @Override
+        public void afterTextChanged(Editable editable) { }
     }
 }
