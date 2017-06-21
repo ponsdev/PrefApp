@@ -73,6 +73,7 @@ public class ScrapCMU {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        downloadThread.interrupt();
 
     }
 

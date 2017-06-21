@@ -128,6 +128,7 @@ public class ScrapSMU {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+        downloadThread.interrupt();
 
     }
 
