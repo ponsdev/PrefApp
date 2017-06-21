@@ -48,8 +48,6 @@ public class ScrapCMU {
         url += ano;
         url += "&Regional=CMU";
 
-        Log.i("EU", "ENTRANDO");
-
         //new cntCMU().execute(url);
 
         final String finalUrl = url;
@@ -60,27 +58,21 @@ public class ScrapCMU {
                     doc = Jsoup.connect(finalUrl).get();
                     docs = doc;
                     setNumProcesso(doc.select("span#lblProcesso").text());
-                    setZoneamento(doc.select("table#dgZoneamento").text());
+                    setZoneamento(doc.select("table#dgZoneamento").text().replace("Zoneamento ", ""));
                     setDecisao(doc.select("span#lblDecisao").text());
                     setDate(doc.select("span#lblData").text());
-                    Log.i("EU", doc.select("span#lblData").text());
+                    return;
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         };
         downloadThread.start();
-        Toast.makeText(context, numProcesso, Toast.LENGTH_LONG).show();
-
-
-        /*String numProcesso = doc.select("span#lblProcesso").text();
-        Toast.makeText(context, numProcesso, Toast.LENGTH_SHORT).show();
-
-        String zoneamento = doc.select("table#dgZoneamento").text();
-
-        String decisao = doc.select("span#lblDecisao").text();
-
-        String date = doc.select("span#lblData").text();*/
+        try {
+            downloadThread.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
     }
 

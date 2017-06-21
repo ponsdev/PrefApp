@@ -3,6 +3,7 @@ package com.example.vinicius.prefapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -10,45 +11,63 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.vinicius.prefapp.dominio.ScrapCMU;
 import com.example.vinicius.prefapp.dominio.ScrapSMU;
 import com.example.vinicius.prefapp.dominio.entidades.Cliente;
+import com.example.vinicius.prefapp.dominio.entidades.respCMU;
 import com.example.vinicius.prefapp.dominio.entidades.respSMU;
 
+import static com.example.vinicius.prefapp.R.id.lstResultados;
+
 /**
- * Created by vinic on 20/06/2017.
+ * Created by vinic on 21/06/2017.
  */
 
-public class ActResultados extends AppCompatActivity {
+public class ActResultadosCMU extends AppCompatActivity {
 
     private Cliente cliente;
     private TextView txtNumProt;
-    private TextView txtNomeClienteSMU;
-    private ListView lstResultados;
-    private ArrayAdapter<respSMU> adpResultados;
+    private TextView txtNumProc;
+    private TextView txtZoneamento;
+    private TextView txtDecisao;
+    private ListView lstResultadosSMU;
+    private ArrayAdapter<respCMU> adpResultados;
+    private ArrayAdapter<respSMU> adpResultadosSMU;
+    private ScrapCMU scrapCMU;
     private ScrapSMU scrapSMU;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.act_resultados);
+        setContentView(R.layout.act_resultados_cmu);
 
-        txtNumProt = (TextView) findViewById(R.id.txtNumProtRes);
-        txtNomeClienteSMU = (TextView) findViewById(R.id.txtNomeClienteSMU);
-        lstResultados = (ListView) findViewById(R.id.lstResultados);
+        txtNumProt = (TextView) findViewById(R.id.txtNumProt);
+        txtNumProc = (TextView) findViewById(R.id.txtNumProc);
+        txtZoneamento = (TextView) findViewById(R.id.txtZoneamento);
+        txtDecisao = (TextView) findViewById(R.id.txtDecisao);
+        lstResultadosSMU = (ListView) findViewById(R.id.lstResultadosSMU);
 
         Bundle bundle = getIntent().getExtras();
         if ((bundle != null) && (bundle.containsKey("CLIENTES"))){
             cliente = (Cliente) bundle.getSerializable("CLIENTES");
-            /*Toast.makeText(this, cliente.getNome().toString() + " carregado...",
-                    Toast.LENGTH_SHORT).show();*/
         }
 
-        scrapSMU = new ScrapSMU();
-        adpResultados = scrapSMU.buscaSMU(this, cliente);
-        lstResultados.setAdapter(adpResultados);
+        scrapCMU = new ScrapCMU();
+        adpResultados = scrapCMU.buscaCMU(this, cliente);
 
         txtNumProt.setText(cliente.getCodigo() + "-" + cliente.getNumero() + "/" + cliente.getAno());
-        txtNomeClienteSMU.setText(cliente.getNome());
+        txtNumProc.setText(scrapCMU.getNumProcesso());
+        txtZoneamento.setText(scrapCMU.getZoneamento());
+        txtDecisao.setText(scrapCMU.getDecisao());
+
+        /*-----------------------------*/
+
+        Log.i("SMU", scrapCMU.getNumProcesso().replace("01-", "").replace("/" + cliente.getAno(), ""));
+        Cliente cliente2 = cliente;
+        cliente2.setNumero(scrapCMU.getNumProcesso().replace("01-", "").replace("/" + cliente.getAno(), ""));
+        scrapSMU = new ScrapSMU();
+        adpResultadosSMU = scrapSMU.buscaSMU(this, cliente);
+        lstResultadosSMU.setAdapter(adpResultadosSMU);
 
     }
 

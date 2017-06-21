@@ -136,9 +136,15 @@ public class MainAct extends AppCompatActivity implements AdapterView.OnItemClic
 
 
         Cliente cliente = adpClientes.getItem(i);
-        Intent it = new Intent(this, ActResultados.class);
-        it.putExtra("CLIENTES", cliente);
-        startActivityForResult(it, 0);
+        if (cliente.getSetor().equals("CMU")) {
+            Intent it = new Intent(this, ActResultadosCMU.class);
+            it.putExtra("CLIENTES", cliente);
+            startActivityForResult(it, 0);
+        } else {
+            Intent it = new Intent(this, ActResultados.class);
+            it.putExtra("CLIENTES", cliente);
+            startActivityForResult(it, 0);
+        }
 
     }
 
