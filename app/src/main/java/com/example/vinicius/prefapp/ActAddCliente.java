@@ -165,6 +165,7 @@ public class ActAddCliente extends AppCompatActivity {
             clienteNovo.setNumero(edtNumero.getText().toString());
             clienteNovo.setAno(spnAno.getSelectedItem().toString());
             clienteNovo.setSetor(spnSetor.getSelectedItem().toString());
+
             if (clienteNovo.getNome().equals(cliente.getNome())){
 
             } else {
@@ -178,7 +179,7 @@ public class ActAddCliente extends AppCompatActivity {
                 Cliente cliente2 = new Cliente();
                 cliente2.setNome(clienteNovo.getNome());
                 cliente2.setCodigo(clienteNovo.getCodigo());
-                cliente2.setNumero(scrapCMU.getNumProcesso().replace("01-", "").replace("/" + cliente.getAno(), ""));
+                cliente2.setNumero(scrapCMU.getNumProcesso().replace("01-", "").replace("/" + clienteNovo.getAno(), ""));
                 cliente2.setAno(clienteNovo.getAno());
                 cliente2.setSetor(clienteNovo.getSetor());
                 CustomArrayAdapter adpResultadosSMU = scrapSMU.buscaSMU(this, cliente2);
@@ -188,10 +189,10 @@ public class ActAddCliente extends AppCompatActivity {
             CustomArrayAdapter adpResultados = scrapSMU.buscaSMU(this, clienteNovo);
 
             if (cliente.getId() == 0) {
-                repositorioClientes.inserir(cliente);
+                repositorioClientes.inserir(clienteNovo);
                 Toast.makeText(this, "Cadastro realizado", Toast.LENGTH_LONG).show();
             } else {
-                repositorioClientes.alterar(cliente);
+                repositorioClientes.alterar(clienteNovo);
                 // acessoSQLSMU.excluirDBSMU(1);
                 Toast.makeText(this, "Cadastro alterado", Toast.LENGTH_LONG).show();
             }

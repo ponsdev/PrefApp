@@ -54,8 +54,13 @@ public class AcessoSQLSMU {
             conn.insertOrThrow("SQLSMU", null, values);
             Log.i("TESTE", objRespSMU.getNome() + " ADICIONADO DB!!! - " + objRespSMU.getId());
         } else {
-            conn.update("SQLSMU", values, " _id = ? ", new String[]{ String.valueOf(objRespSMU.getId()) });
-            Log.i("TESTE", objRespSMU.getNome() + " ALTERADO DB!!! - " + objRespSMU.getId());
+            if (cursor.getString(2).equals(objRespSMU.getParecer()) &&
+                    cursor.getString(3).equals(objRespSMU.getDate())){
+            } else {
+                conn.update("SQLSMU", values, " _id = ? ", new String[]{ String.valueOf(objRespSMU.getId()) });
+                Log.i("TESTE", objRespSMU.getNome() + " ALTERADO DB!!! - " + objRespSMU.getId());
+            }
+
         }
 
     }

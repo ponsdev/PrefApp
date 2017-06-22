@@ -15,7 +15,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="busque aqui"
-        android:id="@+id/edtBusca"/>
+        android:id="@+id/edtBusca"
+        android:maxLines="1"/>
 
     <TextView
         android:layout_width="match_parent"

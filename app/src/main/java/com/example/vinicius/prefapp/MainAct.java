@@ -92,6 +92,9 @@ public class MainAct extends AppCompatActivity implements AdapterView.OnItemClic
         if (conn != null){
             conn.close();
         }
+        if (connSMU != null){
+            connSMU.close();
+        }
     }
 
     @Override

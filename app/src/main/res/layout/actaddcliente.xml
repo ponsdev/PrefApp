@@ -10,13 +10,15 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nome cliente:"/>
+        android:text="Nome cliente:"
+        android:maxLines="1"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="nome"
         android:id="@+id/edtNome"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:maxLines="1"/>
 
     <TextView
         android:layout_width="match_parent"
@@ -31,7 +33,8 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Numero Protocolo:"/>
+        android:text="Numero Protocolo:"
+        android:maxLines="1"/>
     <EditText
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
