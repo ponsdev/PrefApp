@@ -16,8 +16,12 @@ import android.widget.Toast;
 
 import com.example.vinicius.prefapp.app.MsgBox;
 import com.example.vinicius.prefapp.database.Database;
+import com.example.vinicius.prefapp.database.DatabaseSMU;
 import com.example.vinicius.prefapp.dominio.RepositorioClientes;
+import com.example.vinicius.prefapp.dominio.ScrapSMU;
+import com.example.vinicius.prefapp.dominio.entidades.AcessoSQLSMU;
 import com.example.vinicius.prefapp.dominio.entidades.Cliente;
+import com.example.vinicius.prefapp.dominio.entidades.respSMU;
 
 /**
  * Created by vinic on 19/06/2017.
@@ -38,7 +42,13 @@ public class ActAddCliente extends AppCompatActivity {
     private Database dataBase;
     private SQLiteDatabase conn;
     private RepositorioClientes repositorioClientes;
+
+    private DatabaseSMU databaseSMU;
+    private SQLiteDatabase connSMU;
+    private AcessoSQLSMU acessoSQLSMU;
+
     private Cliente cliente;
+    private respSMU objRespSMU;
 
 
     @Override
@@ -90,6 +100,13 @@ public class ActAddCliente extends AppCompatActivity {
 
         } catch (SQLException ex) {
             MsgBox.show(this, "Erro!!!", "Erro ao criar o banco de dados: " + ex.getMessage());
+        }
+        try {
+            databaseSMU = new DatabaseSMU(this);
+            connSMU = databaseSMU.getWritableDatabase();
+            acessoSQLSMU = new AcessoSQLSMU(connSMU);
+        } catch (SQLException ex) {
+            MsgBox.show(this, "Erro", "Erro ao criar o banco de dados resultados: " + ex.getMessage());
         }
 
 
@@ -145,11 +162,15 @@ public class ActAddCliente extends AppCompatActivity {
             cliente.setAno(spnAno.getSelectedItem().toString());
             cliente.setSetor(spnSetor.getSelectedItem().toString());
 
+            ScrapSMU scrapSMU = new ScrapSMU();
+            CustomArrayAdapter adpResultados = scrapSMU.buscaSMU(this, cliente);
+
             if (cliente.getId() == 0) {
                 repositorioClientes.inserir(cliente);
                 Toast.makeText(this, "Cadastro realizado", Toast.LENGTH_LONG).show();
             } else {
                 repositorioClientes.alterar(cliente);
+                // acessoSQLSMU.excluirDBSMU(1);
                 Toast.makeText(this, "Cadastro alterado", Toast.LENGTH_LONG).show();
             }
 
@@ -162,6 +183,7 @@ public class ActAddCliente extends AppCompatActivity {
     private void excluir() {
         try {
             repositorioClientes.excluir( cliente.getId() );
+            acessoSQLSMU.excluirDBSMU(cliente.getNome());
 
         } catch (Exception ex) {
             MsgBox.show(this, "Erro", "Erro ao excluir os dados: " + ex.getMessage());

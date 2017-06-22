@@ -2,9 +2,14 @@ package com.example.vinicius.prefapp.dominio;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 
 import com.example.vinicius.prefapp.CustomArrayAdapter;
 import com.example.vinicius.prefapp.R;
+import com.example.vinicius.prefapp.app.MsgBox;
+import com.example.vinicius.prefapp.database.DatabaseSMU;
+import com.example.vinicius.prefapp.dominio.entidades.AcessoSQLSMU;
 import com.example.vinicius.prefapp.dominio.entidades.Cliente;
 import com.example.vinicius.prefapp.dominio.entidades.respSMU;
 
@@ -24,6 +29,10 @@ public class ScrapSMU {
     private Cliente cliente;
     private Document docs;
     private respSMU objRespSMU;
+
+    private DatabaseSMU databaseSMU;
+    private SQLiteDatabase connSMU;
+    private AcessoSQLSMU acessoSQLSMU;
 
     public CustomArrayAdapter buscaSMU(Context context, Cliente cliente) {
 
@@ -84,6 +93,24 @@ public class ScrapSMU {
                     break;
             }
         }
+        objRespSMU = new respSMU();
+
+        try {
+            databaseSMU = new DatabaseSMU(context);
+            connSMU = databaseSMU.getWritableDatabase();
+            acessoSQLSMU = new AcessoSQLSMU(connSMU);
+        } catch (SQLException ex) {
+            MsgBox.show(context, "Erro", "Erro ao criar o banco de dados resultados: " + ex.getMessage());
+        }
+        objRespSMU = new respSMU();
+        objRespSMU.setNome(cliente.getNome());
+        objRespSMU.setDate(date[0]);
+        objRespSMU.setParecer(parecer[0]);
+        objRespSMU.setDaUnidade(daUnidade[0]);
+        objRespSMU.setDaUnidadeTel(daUnidadeTel[0]);
+        objRespSMU.setParaUnidade(paraUnidade[0]);
+        objRespSMU.setParaUnidadeTel(paraUnidadeTel[0]);
+        acessoSQLSMU.salvarDBSMU(objRespSMU);
 
         for (int y = 0; y < parecer.length; y++) {
             objRespSMU = new respSMU();
@@ -97,7 +124,6 @@ public class ScrapSMU {
 
             adpResultadosSMU.add(objRespSMU);
         }
-
 
         return adpResultadosSMU;
 

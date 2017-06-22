@@ -16,7 +16,7 @@ public class ScriptSQLsmu {
         sqlBuilder.append("DATA          VARCHAR (6), ");
         sqlBuilder.append("DAUNID        VARCHAR (200), ");
         sqlBuilder.append("DAUNIDTEL     VARCHAR (15), ");
-        sqlBuilder.append("PARAUNID      VARCHAR (200) ");
+        sqlBuilder.append("PARAUNID      VARCHAR (200), ");
         sqlBuilder.append("PARAUNIDTEL   VARCHAR (15) ");
         sqlBuilder.append(");");
 

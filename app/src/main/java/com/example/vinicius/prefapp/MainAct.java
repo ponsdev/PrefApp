@@ -18,7 +18,9 @@ import android.database.*;
 
 import com.example.vinicius.prefapp.app.MsgBox;
 import com.example.vinicius.prefapp.database.Database;
+import com.example.vinicius.prefapp.database.DatabaseSMU;
 import com.example.vinicius.prefapp.dominio.RepositorioClientes;
+import com.example.vinicius.prefapp.dominio.entidades.AcessoSQLSMU;
 import com.example.vinicius.prefapp.dominio.entidades.Cliente;
 
 public class MainAct extends AppCompatActivity implements AdapterView.OnItemClickListener{
@@ -30,6 +32,10 @@ public class MainAct extends AppCompatActivity implements AdapterView.OnItemClic
     private Database dataBase;
     private SQLiteDatabase conn;
     private RepositorioClientes repositorioClientes;
+
+    private DatabaseSMU databaseSMU;
+    private SQLiteDatabase connSMU;
+    private AcessoSQLSMU acessoSQLSMU;
 
 
     @Override
@@ -65,7 +71,14 @@ public class MainAct extends AppCompatActivity implements AdapterView.OnItemClic
             edtBusca.addTextChangedListener(filtraDados);
 
         } catch (SQLException ex) {
-            MsgBox.show(this, "Erro", "Erro ao criar o banco de dados: " + ex.getMessage());
+            MsgBox.show(this, "Erro", "Erro ao criar o banco de dados clientes: " + ex.getMessage());
+        }
+
+        try {
+            databaseSMU = new DatabaseSMU(this);
+            connSMU = databaseSMU.getWritableDatabase();
+        } catch (SQLException ex) {
+            MsgBox.show(this, "Erro", "Erro ao criar o banco de dados resultados: " + ex.getMessage());
         }
 
 
@@ -96,14 +109,16 @@ public class MainAct extends AppCompatActivity implements AdapterView.OnItemClic
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.mni_ultimos) {
+        /*if (id == R.id.mni_ultimos) {
             return true;
-        }
+        }*/
         switch (item.getItemId()){
             case (R.id.mni_ultimos):
+                Intent it = new Intent(this, ActUltimos.class);
+                startActivity(it);
                 break;
             case (R.id.mni_criar):
-                Intent it = new Intent(this, ActAddCliente.class);
+                it = new Intent(this, ActAddCliente.class);
                 startActivityForResult(it, 0);
                 break;
             case (R.id.mni_alterar):
