@@ -74,7 +74,8 @@
             android:id="@+id/txtDecisao"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textMultiLine|text" />
+            android:inputType="textMultiLine|text"
+            android:textSize="16sp"/>
 
     </LinearLayout>
 
@@ -83,6 +84,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="center"
-        android:layout_marginTop="20dp" />
+        android:layout_marginTop="20dp"
+        android:layout_margin="10dp"/>
 
 </LinearLayout>

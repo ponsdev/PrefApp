@@ -1,9 +1,9 @@
 package com.example.vinicius.prefapp.dominio;
 
 import android.content.Context;
-import android.util.Log;
-import android.widget.ArrayAdapter;
 
+import com.example.vinicius.prefapp.CustomArrayAdapter;
+import com.example.vinicius.prefapp.R;
 import com.example.vinicius.prefapp.dominio.entidades.Cliente;
 import com.example.vinicius.prefapp.dominio.entidades.respSMU;
 
@@ -24,10 +24,10 @@ public class ScrapSMU {
     private Document docs;
     private respSMU objRespSMU;
 
-    public ArrayAdapter<respSMU> buscaSMU(Context context, Cliente cliente) {
+    public CustomArrayAdapter buscaSMU(Context context, Cliente cliente) {
 
-        ArrayAdapter<respSMU> adpResultadosSMU = new ArrayAdapter<respSMU>(context,
-                android.R.layout.simple_list_item_1);
+        CustomArrayAdapter adpResultadosSMU = new CustomArrayAdapter(context,
+                R.layout.linha_resultados);
         this.cliente = cliente;
 
         connectSMU(context, cliente.getNome(), cliente.getCodigo(), cliente.getNumero(),
@@ -49,6 +49,8 @@ public class ScrapSMU {
         int id = 0;
         for (Element i : tp) {
             parecer[id]	= i.text().replaceAll("Parecer do Protocolo: ", "");
+            parecer[id] = parecer[id].substring(0, 1).toUpperCase() + parecer[id].substring(1).toLowerCase();
+            //parecer[id] = parecer[id].substring(1);
             //System.out.println(parecer[id]);
             id++;
         }
