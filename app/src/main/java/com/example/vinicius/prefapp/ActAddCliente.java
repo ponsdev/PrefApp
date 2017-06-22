@@ -18,9 +18,11 @@ import com.example.vinicius.prefapp.app.MsgBox;
 import com.example.vinicius.prefapp.database.Database;
 import com.example.vinicius.prefapp.database.DatabaseSMU;
 import com.example.vinicius.prefapp.dominio.RepositorioClientes;
+import com.example.vinicius.prefapp.dominio.ScrapCMU;
 import com.example.vinicius.prefapp.dominio.ScrapSMU;
 import com.example.vinicius.prefapp.dominio.entidades.AcessoSQLSMU;
 import com.example.vinicius.prefapp.dominio.entidades.Cliente;
+import com.example.vinicius.prefapp.dominio.entidades.respCMU;
 import com.example.vinicius.prefapp.dominio.entidades.respSMU;
 
 /**
@@ -49,6 +51,8 @@ public class ActAddCliente extends AppCompatActivity {
 
     private Cliente cliente;
     private respSMU objRespSMU;
+
+    private ScrapSMU scrapSMU;
 
 
     @Override
@@ -155,15 +159,33 @@ public class ActAddCliente extends AppCompatActivity {
 
     private void salvar() {
         try {
-            //cliente = new Cliente();
-            cliente.setNome(edtNome.getText().toString());
-            cliente.setCodigo(spnCodigo.getSelectedItem().toString());
-            cliente.setNumero(edtNumero.getText().toString());
-            cliente.setAno(spnAno.getSelectedItem().toString());
-            cliente.setSetor(spnSetor.getSelectedItem().toString());
+            Cliente clienteNovo = new Cliente();
+            clienteNovo.setNome(edtNome.getText().toString());
+            clienteNovo.setCodigo(spnCodigo.getSelectedItem().toString());
+            clienteNovo.setNumero(edtNumero.getText().toString());
+            clienteNovo.setAno(spnAno.getSelectedItem().toString());
+            clienteNovo.setSetor(spnSetor.getSelectedItem().toString());
+            if (clienteNovo.getNome().equals(cliente.getNome())){
+
+            } else {
+                acessoSQLSMU.excluirDBSMU(cliente.getNome());
+            }
+
+            if (clienteNovo.getSetor().equals("CMU")) {
+                ScrapCMU scrapCMU = new ScrapCMU();
+                ArrayAdapter<respCMU> adpResultados = scrapCMU.buscaCMU(this, clienteNovo);
+                ScrapSMU scrapSMU = new ScrapSMU();
+                Cliente cliente2 = new Cliente();
+                cliente2.setNome(clienteNovo.getNome());
+                cliente2.setCodigo(clienteNovo.getCodigo());
+                cliente2.setNumero(scrapCMU.getNumProcesso().replace("01-", "").replace("/" + cliente.getAno(), ""));
+                cliente2.setAno(clienteNovo.getAno());
+                cliente2.setSetor(clienteNovo.getSetor());
+                CustomArrayAdapter adpResultadosSMU = scrapSMU.buscaSMU(this, cliente2);
+            }
 
             ScrapSMU scrapSMU = new ScrapSMU();
-            CustomArrayAdapter adpResultados = scrapSMU.buscaSMU(this, cliente);
+            CustomArrayAdapter adpResultados = scrapSMU.buscaSMU(this, clienteNovo);
 
             if (cliente.getId() == 0) {
                 repositorioClientes.inserir(cliente);

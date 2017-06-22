@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 import com.example.vinicius.prefapp.CustomArrayAdapter;
 import com.example.vinicius.prefapp.R;
@@ -102,6 +103,7 @@ public class ScrapSMU {
         } catch (SQLException ex) {
             MsgBox.show(context, "Erro", "Erro ao criar o banco de dados resultados: " + ex.getMessage());
         }
+        /*
         objRespSMU = new respSMU();
         objRespSMU.setNome(cliente.getNome());
         objRespSMU.setDate(date[0]);
@@ -111,7 +113,7 @@ public class ScrapSMU {
         objRespSMU.setParaUnidade(paraUnidade[0]);
         objRespSMU.setParaUnidadeTel(paraUnidadeTel[0]);
         acessoSQLSMU.salvarDBSMU(objRespSMU);
-
+        */
         for (int y = 0; y < parecer.length; y++) {
             objRespSMU = new respSMU();
             objRespSMU.setNome(cliente.getNome());
@@ -121,7 +123,9 @@ public class ScrapSMU {
             objRespSMU.setDaUnidadeTel(daUnidadeTel[y]);
             objRespSMU.setParaUnidade(paraUnidade[y]);
             objRespSMU.setParaUnidadeTel(paraUnidadeTel[y]);
-
+            if (y == 0) {
+                acessoSQLSMU.salvarDBSMU(objRespSMU);
+            }
             adpResultadosSMU.add(objRespSMU);
         }
 
@@ -169,26 +173,15 @@ public class ScrapSMU {
         this.docs = docs;
     }
 
+    /* ------------------------------------------------ */
 
-}
+    public respSMU smuUpdate(Context context, Cliente cliente){
 
-
-
-    /*
-
-    private static void connectSMU(String cliente, String cod, String num, String ano) throws IOException {
-
-        String url = "http://consultaprotocolo.curitiba.pr.gov.br/frmConsProtocolo.aspx?txtNumProtocolo=";
-        url += num;
-        url += "&txtAnoProtocolo=";
-        url += ano;
-        url += "&txtTipoProtocolo=";
-        url += cod;
-
-
-        Document doc = Jsoup.connect(url).get();
-        Elements tv = doc.select("tr.TramiteValor").select("span.valor");
-        Elements tp = doc.select("tr.TramiteParecer");
+        this.cliente = cliente;
+        connectSMU(context, cliente.getNome(), cliente.getCodigo(), cliente.getNumero(),
+                cliente.getAno());
+        Elements tv = docs.select("tr.TramiteValor").select("span.valor");
+        Elements tp = docs.select("tr.TramiteParecer");
 
         String parecer[] = new String[tp.size()];
         String date[] = new String[100];
@@ -201,6 +194,8 @@ public class ScrapSMU {
         int id = 0;
         for (Element i : tp) {
             parecer[id]	= i.text().replaceAll("Parecer do Protocolo: ", "");
+            parecer[id] = parecer[id].substring(0, 1).toUpperCase() + parecer[id].substring(1).toLowerCase();
+            //parecer[id] = parecer[id].substring(1);
             //System.out.println(parecer[id]);
             id++;
         }
@@ -233,16 +228,26 @@ public class ScrapSMU {
                     break;
             }
         }
+        objRespSMU = new respSMU();
 
-        for (int y = 0; y < parecer.length; y++) {
-            System.out.println("-------------------------------------" + parecer.length);
-            System.out.println(date[y]);
-            System.out.println(parecer[y]);
-            //System.out.println(daUnidade[y]);
-            //System.out.println(daUnidadeTel[y]);
-            //System.out.println(paraUnidade[y]);
-            //System.out.println(paraUnidadeTel[y]);
+        try {
+            databaseSMU = new DatabaseSMU(context);
+            connSMU = databaseSMU.getWritableDatabase();
+            acessoSQLSMU = new AcessoSQLSMU(connSMU);
+        } catch (SQLException ex) {
+            MsgBox.show(context, "Erro", "Erro ao criar o banco de dados resultados: " + ex.getMessage());
         }
+        objRespSMU = new respSMU();
+        objRespSMU.setNome(cliente.getNome());
+        objRespSMU.setDate(date[0]);
+        objRespSMU.setParecer(parecer[0]);
+        objRespSMU.setDaUnidade(daUnidade[0]);
+        objRespSMU.setDaUnidadeTel(daUnidadeTel[0]);
+        objRespSMU.setParaUnidade(paraUnidade[0]);
+        objRespSMU.setParaUnidadeTel(paraUnidadeTel[0]);
 
+        return objRespSMU;
     }
-*/
+
+
+}

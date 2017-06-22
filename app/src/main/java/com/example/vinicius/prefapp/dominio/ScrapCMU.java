@@ -27,6 +27,7 @@ public class ScrapCMU {
     private String date;
 
 
+
     public ArrayAdapter<respCMU> buscaCMU(Context context, Cliente cliente) {
 
         ArrayAdapter<respCMU> adpResultadosCMU = new ArrayAdapter<respCMU>(context,
@@ -75,6 +76,15 @@ public class ScrapCMU {
         }
         downloadThread.interrupt();
 
+    }
+
+    public String cmuNumProcesso(Context context, Cliente cliente){
+        this.cliente = cliente;
+        connectCMU(context, cliente.getNome().toString(), cliente.getCodigo().toString(),
+                cliente.getNumero().toString(), cliente.getAno().toString());
+        String numProcesso = getNumProcesso().replace("01-", "").replace("/" + cliente.getAno(), "");
+
+        return numProcesso;
     }
 
     public Document getDocs() {

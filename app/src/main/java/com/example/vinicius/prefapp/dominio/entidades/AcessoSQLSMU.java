@@ -4,10 +4,13 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.example.vinicius.prefapp.ClientesArrayAdapter;
 import com.example.vinicius.prefapp.CustomArrayAdapter;
 import com.example.vinicius.prefapp.R;
+import com.example.vinicius.prefapp.UltimosArrayAdapter;
 
 /**
  * Created by vinicius on 21/06/17.
@@ -49,8 +52,10 @@ public class AcessoSQLSMU {
 
         if (existe == false) {
             conn.insertOrThrow("SQLSMU", null, values);
+            Log.i("TESTE", objRespSMU.getNome() + " ADICIONADO DB!!! - " + objRespSMU.getId());
         } else {
             conn.update("SQLSMU", values, " _id = ? ", new String[]{ String.valueOf(objRespSMU.getId()) });
+            Log.i("TESTE", objRespSMU.getNome() + " ALTERADO DB!!! - " + objRespSMU.getId());
         }
 
     }
@@ -60,9 +65,9 @@ public class AcessoSQLSMU {
         //conn.delete("SQLSMU", " _id = ? ", new String[]{ String.valueOf(0)});
     }
 
-    public CustomArrayAdapter buscarDBSMU(Context context) {
+    public UltimosArrayAdapter buscarDBSMU(Context context) {
 
-        CustomArrayAdapter adpUltimos = new CustomArrayAdapter(context, R.layout.linha_resultados);
+        UltimosArrayAdapter adpUltimos = new UltimosArrayAdapter(context, R.layout.linha_ultimos);
         Cursor cursor = conn.query("SQLSMU", null, null, null, null, null, null);
 
         if (cursor.getCount() > 0) {
@@ -77,6 +82,7 @@ public class AcessoSQLSMU {
                 objRespSMU.setDaUnidadeTel(cursor.getString(5));
                 objRespSMU.setParaUnidade(cursor.getString(6));
                 objRespSMU.setParaUnidadeTel(cursor.getString(7));
+
                 adpUltimos.add(objRespSMU);
             } while (cursor.moveToNext());
         }

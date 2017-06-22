@@ -62,11 +62,14 @@ public class ActResultadosCMU extends AppCompatActivity {
 
         /*-----------------------------*/
 
-        Log.i("SMU", scrapCMU.getNumProcesso().replace("01-", "").replace("/" + cliente.getAno(), ""));
-        Cliente cliente2 = cliente;
+        Cliente cliente2 = new Cliente();
+        cliente2.setNome(cliente.getNome());
+        cliente2.setCodigo(cliente.getCodigo());
         cliente2.setNumero(scrapCMU.getNumProcesso().replace("01-", "").replace("/" + cliente.getAno(), ""));
+        cliente2.setAno(cliente.getAno());
+        cliente2.setSetor(cliente.getSetor());
         scrapSMU = new ScrapSMU();
-        adpResultadosSMU = scrapSMU.buscaSMU(this, cliente);
+        adpResultadosSMU = scrapSMU.buscaSMU(this, cliente2);
         lstResultadosSMU.setAdapter(adpResultadosSMU);
 
     }
