@@ -1,5 +1,6 @@
 package com.example.vinicius.prefapp.dominio;
 
+import android.content.ContentValues;
 import android.content.Context;
 
 import com.example.vinicius.prefapp.CustomArrayAdapter;
