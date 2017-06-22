@@ -6,6 +6,8 @@ import android.database.Cursor;
 import android.database.sqlite.*;
 import android.widget.ArrayAdapter;
 
+import com.example.vinicius.prefapp.ClientesArrayAdapter;
+import com.example.vinicius.prefapp.R;
 import com.example.vinicius.prefapp.dominio.entidades.Cliente;
 
 /**
@@ -53,10 +55,10 @@ public class RepositorioClientes {
         conn.delete("CLIENTES", " _id = ? ", new String[]{ String.valueOf( id ) });
     }
 
-    public ArrayAdapter<Cliente> buscaClientes(Context context) {
+    public ClientesArrayAdapter buscaClientes(Context context) {
 
-        ArrayAdapter<Cliente> adpClientes = new ArrayAdapter<Cliente>(context,
-                android.R.layout.simple_list_item_1);
+        ClientesArrayAdapter adpClientes = new ClientesArrayAdapter(context,
+                R.layout.linha_clientes);
         Cursor cursor = conn.query("CLIENTES", null, null, null, null, null, null);
 
         if (cursor.getCount() > 0){

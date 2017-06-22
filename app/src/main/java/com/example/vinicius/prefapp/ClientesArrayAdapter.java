@@ -49,6 +49,7 @@ public class ClientesArrayAdapter extends ArrayAdapter<Cliente> {
         viewHolder.txtNomeCliente.setText(cliente.getNome());
         viewHolder.txtNumeroProtocolo.setText(cliente.getCodigo() + "-" + cliente.getNumero() + "/"
                 + cliente.getAno());
+        viewHolder.txtSetor.setText(cliente.getSetor());
 
         return view;
     }
