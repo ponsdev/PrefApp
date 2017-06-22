@@ -27,7 +27,9 @@ public class AcessoSQLSMU {
 
     }
 
-    public void salvarDBSMU(respSMU objRespSMU) {
+    public String salvarDBSMU(respSMU objRespSMU) {
+
+        String s = "";
 
         Cursor cursor = conn.query("SQLSMU", null, null, null, null, null, null);
 
@@ -59,9 +61,12 @@ public class AcessoSQLSMU {
             } else {
                 conn.update("SQLSMU", values, " _id = ? ", new String[]{ String.valueOf(objRespSMU.getId()) });
                 Log.i("TESTE", objRespSMU.getNome() + " ALTERADO DB!!! - " + objRespSMU.getId());
+                s = objRespSMU.getNome() + " foi alterado!";
             }
 
         }
+
+        return s;
 
     }
 

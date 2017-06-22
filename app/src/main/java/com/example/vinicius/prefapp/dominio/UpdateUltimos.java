@@ -6,6 +6,7 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 import android.widget.ArrayAdapter;
+import android.widget.Toast;
 
 import com.example.vinicius.prefapp.CustomArrayAdapter;
 import com.example.vinicius.prefapp.MainAct;
@@ -39,6 +40,9 @@ public class UpdateUltimos {
         SQLiteDatabase conn = null;
 
         respSMU objRespSMU = new respSMU();
+
+        String s = "";
+        String msg = "";
 
         try {
             databaseSMU = new DatabaseSMU(context);
@@ -76,12 +80,6 @@ public class UpdateUltimos {
                         cliente.setAno(cursorCliente.getString(4));
                         cliente.setSetor(cursorCliente.getString(5));
 
-                        if (cliente.getSetor().equals("SMU")){
-                            ScrapSMU scrapSMU = new ScrapSMU();
-                            objRespSMU = scrapSMU.smuUpdate(context, cliente);
-                            adpUltimos.add(objRespSMU);
-                            acessoSQLSMU.salvarDBSMU(objRespSMU);
-                        }
                         if (cliente.getSetor().equals("CMU")){
                             ScrapCMU scrapCMU = new ScrapCMU();
                             Cliente cliente2 = new Cliente();
@@ -93,15 +91,25 @@ public class UpdateUltimos {
                             ScrapSMU scrapSMU = new ScrapSMU();
                             objRespSMU = scrapSMU.smuUpdate(context, cliente2);
                             adpUltimos.add(objRespSMU);
-                            acessoSQLSMU.salvarDBSMU(objRespSMU);
+                            s = acessoSQLSMU.salvarDBSMU(objRespSMU);
+                        }
+                        else {
+                            ScrapSMU scrapSMU = new ScrapSMU();
+                            objRespSMU = scrapSMU.smuUpdate(context, cliente);
+                            adpUltimos.add(objRespSMU);
+                            s = acessoSQLSMU.salvarDBSMU(objRespSMU);
                         }
 
+                        msg += s + "\n";
+
                     }
+
                 }while (cursorCliente.moveToNext());
 
             }while (cursor.moveToNext());
         }
 
+        Toast.makeText(context, msg, Toast.LENGTH_LONG);
         return adpUltimos;
 
     }

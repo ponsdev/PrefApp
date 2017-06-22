@@ -42,7 +42,7 @@ public class ActUltimos extends AppCompatActivity implements AdapterView.OnItemC
 
         lstUltimos = (ListView) findViewById(R.id.lstUltimos);
 
-        //adpUltimos = UpdateUltimos.atualizar(this);
+        adpUltimos = UpdateUltimos.atualizar(this);
 
         try {
             databaseSMU = new DatabaseSMU(this);
@@ -67,6 +67,7 @@ public class ActUltimos extends AppCompatActivity implements AdapterView.OnItemC
         switch (item.getItemId()){
             case (R.id.mni_atualizar):
                 adpUltimos = UpdateUltimos.atualizar(this);
+                adpUltimos = acessoSQLSMU.buscarDBSMU(this);
                 lstUltimos.setAdapter(adpUltimos);
                 break;
             case (R.id.mni_fechar):
